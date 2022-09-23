@@ -28,7 +28,7 @@
 
 #define BUFFER_LENGTH 32
 
-#if defined(__M451__)
+#if defined(__M451__) || defined(__M252__)
 #define I2C_STA_STO_SI 		I2C_CTL_STA_STO_SI       
 #define I2C_STA_STO_SI_AA 	I2C_CTL_STA_STO_SI_AA    
 #define I2C_STA_SI 	        I2C_CTL_STA_SI           

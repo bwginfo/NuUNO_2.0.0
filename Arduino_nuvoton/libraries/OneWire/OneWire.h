@@ -45,8 +45,12 @@
 #define ONEWIRE_CRC16 1
 #endif
 
+#ifndef FALSE
 #define FALSE 0
+#endif
+#ifndef TRUE
 #define TRUE  1
+#endif
 
 // Platform specific I/O definitions
 
@@ -116,7 +120,7 @@
 #define IO_REG_TYPE uint32_t
 #define IO_REG_ASM
 #define DIRECT_READ(base, mask)         ( (*(base+0x4) & mask )? 1 : 0 )
-#if defined(__M451__)
+#if defined(__M451__) || defined(__M252__)
 #define DIRECT_MODE_INPUT(base, mask)  	(GPIO_SetMode((GPIO_T *)base,mask,GPIO_MODE_INPUT))
 #define DIRECT_MODE_OUTPUT(base, mask)  (GPIO_SetMode((GPIO_T *)base,mask,GPIO_MODE_OUTPUT))
 #elif defined(__NUC240__) | defined(__NANO100__) | defined(__NUC131__)

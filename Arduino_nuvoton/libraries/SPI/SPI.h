@@ -13,6 +13,9 @@
 
 #include "Arduino.h"
 
+#if defined(__M252__)
+#undef SPI1
+#endif
 
 #if defined(__M032BT__)
 
@@ -124,7 +127,7 @@ class SPIClass {
 	union{
 		void *_vspi;
 		SPI_T *spi;
-#if defined(__M032BT__)
+#if defined(__M032BT__) || defined(__M252__)
 		USPI_T *uspi;
 #endif
 	};

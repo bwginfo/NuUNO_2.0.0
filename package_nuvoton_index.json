@@ -24,6 +24,11 @@
                   "toolsDependencies": [
                     {
                       "packager": "arduino",
+                      "name": "openocd",
+                      "version": "0.11.0-arduino2"
+                    },
+                    {
+                      "packager": "arduino",
                       "name": "arm-none-eabi-gcc",
                       "version": "7-2017q4"
                     }

@@ -1639,5 +1639,4 @@ GPIOPinDescription GPIO_Desc[] =
     {PA, BIT14, {(uint32_t) &SYS->PA_H_MFP, SYS_PA_H_MFP_PA14_MFP_Msk, SYS_PA_H_MFP_PA14_MFP_GPA14}}, //32
 };
 #endif
-
 #endif

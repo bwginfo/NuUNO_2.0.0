@@ -61,6 +61,17 @@ uint8_t Servo::attach(int ulPin, int min, int max)
 		fixValue[ulPin]=ulValue;
 		//return 0;
 	}
+#elif defined(__M252__)
+	if(ulValue==0)
+	{  
+		int32_t pin=PWM_Desc[ulPin].pintype.num;
+		GPIO_Config(GPIO_Desc[pin]);
+		GPIO_SetMode(GPIO_Desc[pin].P, GPIO_Desc[pin].bit, GPIO_MODE_OUTPUT);
+		(GPIO_Desc[pin].P)->DOUT &= ~GPIO_Desc[pin].bit;
+		pinEnabled[ulPin]= 0;
+		fixValue[ulPin]=ulValue;
+		//return 0;
+	}
 #elif defined(__NUC240__)
 	if(ulValue==0)
 	{  

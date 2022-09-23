@@ -18,7 +18,7 @@
 
 #include "WInterrupts.h"
 
-#if defined(__M451__)
+#if defined(__M451__) || (__M252__)
 
 typedef void (*interruptCB)(void);
 #define GNUM 16
@@ -178,7 +178,11 @@ void GPD_IRQHandler(void)
 	  }  
 }
 
+#if defined(__M252__)
+void GPE_IRQHandler(void)
+#else
 void GGPE_IRQHandler(void)
+#endif
 {
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
@@ -190,7 +194,11 @@ void GGPE_IRQHandler(void)
 	  }  
 }
 
+#if defined(__M252__)
+void GPF_IRQHandler(void)
+#else
 void GGPF_IRQHandler(void)
+#endif
 {
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {

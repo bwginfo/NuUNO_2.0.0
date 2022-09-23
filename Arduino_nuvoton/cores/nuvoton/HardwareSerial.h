@@ -37,7 +37,7 @@
 #include <inttypes.h>
 
 #include "Stream.h"
-
+#include "Pins_arduino.h"
 
 #define SERIAL_BUFFER_SIZE 16
 

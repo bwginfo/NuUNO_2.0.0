@@ -115,6 +115,19 @@ void Enable_All_IPs(void)
 
     CLK_SetModuleClock(PWM0_CH01_MODULE, CLK_CLKSEL1_PWM0_CH01_S_HCLK, 0);
     CLK_SetModuleClock(PWM0_CH23_MODULE, CLK_CLKSEL1_PWM0_CH23_S_HCLK, 0);
+#elif defined(__M252__)
+    //Enable ADC module
+    CLK_EnableModuleClock(EADC_MODULE);
+    /* EADC clock source is 72MHz, set divider to 8, ADC clock is 72/8 MHz */
+    CLK_SetModuleClock(EADC_MODULE, 0, CLK_CLKDIV0_EADC(8));
+
+    //Enable PWM0 ~PWM1 module
+    CLK_EnableModuleClock(PWM0_MODULE);
+    CLK_EnableModuleClock(PWM1_MODULE);
+
+    CLK_SetModuleClock(PWM0_MODULE, CLK_CLKSEL2_PWM0SEL_PCLK0, 0);
+    CLK_SetModuleClock(PWM1_MODULE, CLK_CLKSEL2_PWM1SEL_PCLK1, 0);
+
 #endif
 
 }
@@ -260,11 +273,32 @@ void init(void)
 
     /* Select IP clock source */
     //CLK_SetModuleClock(UART0_MODULE,CLK_CLKSEL1_UART_S_HIRC,CLK_UART_CLK_DIVIDER(1));
+#elif defined(__M252__)
+
+    /* Enable HIRC clock (Internal RC 48MHz) */
+    CLK_EnableXtalRC(CLK_PWRCTL_HIRCEN_Msk);
+
+    /* Wait for HIRC clock ready */
+    CLK_WaitClockReady(CLK_STATUS_HIRCSTB_Msk);
+
+    /* Select HCLK clock source as HIRC and and HCLK source divider as 1 */
+    CLK_SetHCLK(CLK_CLKSEL0_HCLKSEL_HIRC, CLK_CLKDIV0_HCLK(1));
+
+    /* Set core clock as PLL_CLOCK from PLL */
+    CLK_SetCoreClock(F_CPU);
+
+    /* Set both PCLK0 and PCLK1 as HCLK/2 */
+    CLK->PCLKDIV = CLK_PCLKDIV_APB0DIV_DIV1 | CLK_PCLKDIV_APB1DIV_DIV1;
+
+    /* Disable digital input path of analog pin XT1_OUT to prevent leakage */
+    //GPIO_DISABLE_DIGITAL_PATH(PF, (1ul << 2));
+
+    /* Disable digital input path of analog pin XT1_IN to prevent leakage */
+    //GPIO_DISABLE_DIGITAL_PATH(PF, (1ul << 3));
 #endif
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
-
     /* Set Systick to 1ms interval */
     if (SysTick_Config(F_CPU / 1000))
     {
@@ -276,7 +310,6 @@ void init(void)
     SystemCoreClockUpdate();
     /* Enable All of IP */
     Enable_All_IPs();
-
     /* Lock protected registers */
     SYS_LockReg();
 }

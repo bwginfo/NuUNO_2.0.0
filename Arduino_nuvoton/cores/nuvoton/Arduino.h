@@ -26,6 +26,8 @@
   #include "NUC131.h"
 #elif defined(__NANO1X2__)
   #include "Nano1X2Series.h"
+#elif defined(__M252__)
+  #include "M251.h"
 #elif defined(__M032BT__)
   #include "M031Series.h"
   #define ENABLE_C_PRINTF 1 /* enable UART0 PA0 PA1 fo C style printf in M032BT board for internal use*/
@@ -58,11 +60,7 @@
 #endif
 
 #include "Pins_arduino.h"
-
 #include "wiring_constants.h"
-
-
-#define ARDUINO 100
 
 extern uint32_t SystemTickClock;
 #define clockCyclesPerMicrosecond() ( SystemCoreClock / 1000000L )

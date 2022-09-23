@@ -64,6 +64,11 @@ extern void itoa( int n, char s[] )
   reverse( s ) ;
 }
 
+extern char* utoa( unsigned long value, char *string, int radix )
+{
+  return ultoa( value, string, radix ) ;
+}
+
 #else
 
 extern char* itoa( int value, char *string, int radix )
@@ -121,10 +126,6 @@ extern char* ltoa( long value, char *string, int radix )
   return string;
 }
 
-extern char* utoa( unsigned long value, char *string, int radix )
-{
-  return ultoa( value, string, radix ) ;
-}
 
 extern char* ultoa( unsigned long value, char *string, int radix )
 {

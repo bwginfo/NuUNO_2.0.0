@@ -94,6 +94,19 @@
 	#if(NR_TIMERS>3)
 		HardwareTimer Timer4(3,TMR3_MODULE,CLK_CLKSEL1_TMR3SEL_PCLK1);
 	#endif
+#elif  defined(__M252__)
+	#if(NR_TIMERS>0)
+		HardwareTimer Timer1(0,TMR0_MODULE,CLK_CLKSEL1_TMR0SEL_HIRC);
+	#endif
+	#if(NR_TIMERS>1)
+		HardwareTimer Timer2(1,TMR1_MODULE,CLK_CLKSEL1_TMR1SEL_HIRC);
+	#endif
+	#if(NR_TIMERS>2)
+		HardwareTimer Timer3(2,TMR2_MODULE,CLK_CLKSEL1_TMR2SEL_HIRC);
+	#endif
+	#if(NR_TIMERS>3)
+		HardwareTimer Timer4(3,TMR3_MODULE,CLK_CLKSEL1_TMR3SEL_HIRC);
+	#endif
 
 #endif
 
@@ -170,7 +183,7 @@ HardwareTimer::HardwareTimer(uint8_t timerNum,uint32_t moduleIdx,uint32_t clksel
     channel=timerNum;      
     TimerFuncPtr[0]=NULL; 
     CLK_EnableModuleClock(moduleIdx);
-	CLK_SetModuleClock(moduleIdx,clksel,NULL); 
+	CLK_SetModuleClock(moduleIdx,clksel,0); 
 }
 
 void HardwareTimer::open(uint32_t mode,uint32_t freq) { 

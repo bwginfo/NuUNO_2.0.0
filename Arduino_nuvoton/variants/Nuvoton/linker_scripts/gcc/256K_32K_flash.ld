@@ -122,6 +122,8 @@ SECTIONS
         . = ALIGN(4);
         _ebss = . ;
         _ezero = .;
+
+        PROVIDE(end = .);
     } > ram
 
     . = ALIGN(4);

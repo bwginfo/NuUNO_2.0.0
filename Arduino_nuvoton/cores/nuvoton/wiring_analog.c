@@ -51,10 +51,10 @@ void analogReference(eAnalogReference ulMode)
 
 uint32_t analogRead(uint32_t ulPin)
 {
-#if defined(__M451__)
+#if defined(__M451__) || defined(__M252__)
   volatile uint32_t ulValue = 0;  
 
-  if(ulPin>ADC_MAX_COUNT || ADC_Desc[ulPin].A==NULL) return;  	  
+  if(ulPin>ADC_MAX_COUNT || ADC_Desc[ulPin].A==NULL) return 0;  	  
   	  	
 	/* Disable the digital input path to avoid the leakage current. */
   GPIO_DISABLE_DIGITAL_PATH(GPIO_Desc[ADC_Desc[ulPin].pintype.num].P,GPIO_Desc[ADC_Desc[ulPin].pintype.num].bit);
@@ -62,8 +62,13 @@ uint32_t analogRead(uint32_t ulPin)
   ADC_Config(ADC_Desc[ulPin]);
   
   /* Set the ADC internal sampling time, input mode as single-end and enable the A/D converter */
+#if defined(__M252__)
+	EADC_Open(ADC_Desc[ulPin].A, 0);
+	EADC_SetExtendSampleTime(EADC, ADC_Desc[ulPin].ch, 6);
+#else
 	EADC_Open(ADC_Desc[ulPin].A, EADC_CTL_DIFFEN_SINGLE_END);
 	EADC_SetInternalSampleTime(EADC, 6);
+#endif
 	
 	/* Configure the sample 0 module for analog input channel 0 and enable ADINT0 trigger source */
 	EADC_ConfigSampleModule(EADC,ADC_Desc[ulPin].ch, EADC_ADINT0_TRIGGER, ADC_Desc[ulPin].ch);
@@ -79,10 +84,10 @@ uint32_t analogRead(uint32_t ulPin)
 	
 	while(!(EADC_GET_INT_FLAG(EADC,0x1)));
   
-  ulValue=EADC_GET_CONV_DATA(EADC, ADC_Desc[ulPin].ch);
+	ulValue=EADC_GET_CONV_DATA(EADC, ADC_Desc[ulPin].ch);
   
  	/* Wait conversion done */
- 	while(EADC_GET_DATA_VALID_FLAG(EADC, (0x1 << ADC_Desc[ulPin].ch)) !=(0x1 << ADC_Desc[ulPin].ch));
+ 	while(EADC_GET_DATA_VALID_FLAG(EADC, (0x1 << ADC_Desc[ulPin].ch)) != ( 0x1U << ADC_Desc[ulPin].ch));
 	
 	/* Disable the sample module interrupt */
 	EADC_DISABLE_SAMPLE_MODULE_INT(EADC, 0, (1<<ADC_Desc[ulPin].ch));
@@ -129,7 +134,7 @@ uint32_t analogRead(uint32_t ulPin)
   // Close ADC
   ADC_Close(ADC_Desc[ulPin].A);
 
-#elif defined(__NANO100__) | defined(__NANO1X2__)
+#elif defined(__NANO100__) || defined(__NANO1X2__)
   uint32_t ulValue = 0;  
 
   if(ulPin>ADC_MAX_COUNT || ADC_Desc[ulPin].A==NULL) return;  	  
@@ -247,7 +252,6 @@ uint32_t analogRead(uint32_t ulPin)
 // hardware support.  These are defined in the appropriate
 // pins_*.c file.  For the rest of the pins, we default
 // to digital output.
-static uint8_t PWMEnabled = 0;
 static uint8_t pinEnabled[PWM_MAX_COUNT]={0};
 static uint32_t fixValue[PWM_MAX_COUNT]={0};
 void analogWrite(uint32_t ulPin, uint32_t ulValue) {
@@ -274,7 +278,17 @@ void analogWrite(uint32_t ulPin, uint32_t ulValue) {
 		fixValue[ulPin]=ulValue;
 		return;
 	}
-	
+#elif defined(__M252__)
+	if(ulValue==0)
+	{  
+		int32_t pin=PWM_Desc[ulPin].pintype.num;
+		GPIO_Config(GPIO_Desc[pin]);
+		GPIO_SetMode(GPIO_Desc[pin].P, GPIO_Desc[pin].bit, GPIO_MODE_OUTPUT);
+		(GPIO_Desc[pin].P)->DOUT &= ~GPIO_Desc[pin].bit;
+		pinEnabled[ulPin]= 0;
+		fixValue[ulPin]=ulValue;
+		return;
+	}	
 #elif defined(__NUC240__)
 	if(ulValue==0)
 	{  
@@ -286,7 +300,7 @@ void analogWrite(uint32_t ulPin, uint32_t ulValue) {
 		fixValue[ulPin]=ulValue;
 		return;
 	}
-#elif defined(__NANO100__) | defined(__NANO1X2__)
+#elif defined(__NANO100__) || defined(__NANO1X2__)
 	if(ulValue==0)
 	{  
 		int32_t pin=PWM_Desc[ulPin].pintype.num;

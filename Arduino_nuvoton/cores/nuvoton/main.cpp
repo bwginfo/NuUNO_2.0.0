@@ -48,8 +48,8 @@ int main( void )
 
 	init();	//nuvoton board init
 
-	#if defined(__M451__) | defined(__NUC240__) |defined(__NANO100__)
-	  USBDevice.attach();
+	#if defined(__M451__) || defined(__NUC240__) || defined(__NANO100__)
+    USBDevice.attach();
 	#endif
   
 	setup();

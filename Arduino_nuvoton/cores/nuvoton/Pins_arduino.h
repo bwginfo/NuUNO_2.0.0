@@ -20,6 +20,11 @@
 
 #define USE_BoardToPin
 
+#if defined(__M252__)
+#include "Pins_M252_arduino.h"
+
+#else
+
 /* Types used for the tables below */
 typedef struct _PinType
 {
@@ -543,5 +548,7 @@ do { \
         static const uint8_t SCL = 13;
     #endif
 #endif
+
+#endif  //end of defined(__M252__)
 
 #endif

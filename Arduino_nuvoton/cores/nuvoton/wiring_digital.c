@@ -24,7 +24,6 @@ extern "C" {
 
 extern void pinMode(uint32_t ulPin, uint32_t ulMode)
 {
-    uint32_t len;
 #ifdef USE_BoardToPin
     if (ulPin > BoardToPin_MAX_COUNT) return;
     if (BoardToPinInfo[ulPin].pin == -1) return;
@@ -33,7 +32,8 @@ extern void pinMode(uint32_t ulPin, uint32_t ulMode)
     if (ulPin > GPIO_MAX_COUNT || GPIO_Desc[ulPin].P == NULL) return;
 #endif
     GPIO_Config(GPIO_Desc[ulPin]);
-#if defined(__M451__)
+#if defined(__M451__) || defined(__M252__)
+
     switch (ulMode)
     {
     case INPUT:
