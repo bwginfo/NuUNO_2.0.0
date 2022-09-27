@@ -37,12 +37,23 @@
  ******************************************************************************/
 EEPROMClass::EEPROMClass()
 {
-	 Wire.begin();
+//	 Wire.begin();
+  begin_done = false;
+}
+
+void EEPROMClass::begin()
+{
+  if(begin_done == false)
+    Wire.begin();
+
+  begin_done = true;
 }
 
 uint8_t EEPROMClass::read(int address)
 {
 			uint8_t reading;     			
+      if(begin_done == false)
+        begin();
   		Wire.beginTransmission(0x50); // transmit to device #80(0x50)
       Wire.write(byte(address>>8)); // high address
       Wire.write(byte(address)); 		//low address
@@ -58,6 +69,8 @@ uint8_t EEPROMClass::read(int address)
 
 void EEPROMClass::write(int address, uint8_t value)
 {
+    if(begin_done == false)
+      begin();
 		Wire.beginTransmission(80); // transmit to device #80(0x50)
     Wire.write(address>>8); 		// high address
     Wire.write(address);  			// low address

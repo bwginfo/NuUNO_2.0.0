@@ -288,8 +288,6 @@ void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder) {
 			SPI_SET_LSB_FIRST(spi);
 		else
 			SPI_SET_MSB_FIRST(spi);
-
-		SPI_EnableAutoSS(spi, SPI_SS, SPI_SS_ACTIVE_LOW);
 	}
 	else if(_vspi == USPI0)
 	{
@@ -297,9 +295,7 @@ void SPIClass::setBitOrder(uint8_t _pin, BitOrder _bitOrder) {
 		if(_bitOrder==LSBFIRST)
 			USPI_SET_LSB_FIRST(uspi);
 		else
-			USPI_SET_MSB_FIRST(uspi);
-		
-		USPI_EnableAutoSS(uspi, USPI_SS, USPI_SS_ACTIVE_LOW);
+			USPI_SET_MSB_FIRST(uspi);		
 	}
 #else
 	if(_bitOrder==LSBFIRST)
@@ -472,7 +468,7 @@ void SPIClass::detachInterrupt(void) {
 }
 
 #if SPI_MAX_COUNT > 0
-#define SPI_ID0 0
+#define SPI_ID0 1
 static void SPI_0_Init(void) {	
 	SPI_Config(SPI_Desc[SPI_ID0]);	
 }
@@ -482,7 +478,7 @@ SPIClass SPI(SPI_Desc[SPI_ID0].S,SPI_Desc[SPI_ID0].module,SPI_Desc[SPI_ID0].clks
 #endif
 
 #if SPI_MAX_COUNT >1
-#define SPI_ID1 1
+#define SPI_ID1 0
 static void SPI_1_Init(void) {	
 	SPI_Config(SPI_Desc[SPI_ID1]);	
 }

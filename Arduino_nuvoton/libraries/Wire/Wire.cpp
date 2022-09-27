@@ -350,6 +350,7 @@ void TwoWire::onService(void) {
 static void Wire_Init(void) {
 	
 	IRQn_Type irq=I2C0_IRQn;
+
 	I2C_Config(I2C_Desc[0]);	
 	/* Enable IP clock */       
 	CLK_EnableModuleClock(I2C_Desc[0].module);    	

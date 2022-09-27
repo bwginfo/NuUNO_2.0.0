@@ -51,7 +51,7 @@ int main( void )
 	#if defined(__M451__) || defined(__NUC240__) || defined(__NANO100__)
     USBDevice.attach();
 	#endif
-  
+
 	setup();
 
 	for (;;)

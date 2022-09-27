@@ -27,8 +27,11 @@ class EEPROMClass
 {
   public:
   	EEPROMClass();
+    void begin();
     uint8_t read(int);
     void write(int, uint8_t);
+  private:
+    bool begin_done;
 };
 
 extern EEPROMClass EEPROM;

@@ -19,7 +19,7 @@
 #include <nvtServo.h>
 volatile uint32_t Servo_MAX=180;
 volatile uint32_t Servo_MIN=0;
-volatile uint32_t Pwm2Servo_max=10; 
+volatile uint32_t Pwm2Servo_max=13; //For Tower Pro SG90 
 volatile uint32_t Pwm2Servo_min=3;
 int Servo_Pin=0;
 int Servo_Val=0;
