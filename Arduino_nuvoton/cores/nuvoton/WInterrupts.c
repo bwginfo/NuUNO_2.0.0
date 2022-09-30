@@ -29,6 +29,15 @@ static interruptCB callbacksGPD[GNUM];
 static interruptCB callbacksGPE[GNUM];
 static interruptCB callbacksGPF[GNUM];
 
+#if defined(__M252__)
+/* for software serial */
+uint8_t g_u8Softserail_enable=0;
+uint8_t g_u8Softserail_port_num;
+uint8_t g_u8Softserail_pin_num;
+static interruptCB pfn_software_uart_handler = NULL;
+GPIO_T* g_u8Softserail_port_base;
+#endif
+
 /* Configure GPIO interrupt sources */
 static void __initialize() {
 	int i;
@@ -70,6 +79,18 @@ void attachInterrupt(uint32_t pin, void (*callback)(void), uint32_t mode)
 	uint32_t t;
 	
 	for (t = mask; t>1; t>>=1, pos++);
+
+#if defined(__M252__)
+    /*special mode for Softserial*/
+    if(   (g_u8Softserail_enable)
+        &&(pio == g_u8Softserail_port_base) 
+        &&(pos == g_u8Softserail_pin_num) 
+    ) { //check if the softserial rx pin
+        pfn_software_uart_handler = callback;
+        
+    } else { //origin path
+#endif
+
 	// Set callback function
 	
 	if (pio == PA )
@@ -84,6 +105,10 @@ void attachInterrupt(uint32_t pin, void (*callback)(void), uint32_t mode)
 		callbacksGPE[pos] = callback;
 	else if (pio == PF )
 		callbacksGPF[pos] = callback;		
+#if defined(__M252__)
+	}
+#endif
+
 	// Enable interrupt
 	if(mode==FALLING)
 		GPIO_EnableInt(pio,pos,GPIO_INT_FALLING);
@@ -113,6 +138,17 @@ void detachInterrupt(uint32_t pin)
 	// Disable interrupt
 	GPIO_DisableInt(pio,pos);
 	
+#if defined(__M252__)
+    /*special mode for Softserial*/
+    if(   (g_u8Softserail_enable)
+        &&(pio == g_u8Softserail_port_base) 
+        &&(pos == g_u8Softserail_pin_num) 
+    ) { //check if the softserial rx pin
+        g_u8Softserail_enable=0;
+        pfn_software_uart_handler = NULL;
+        
+    } else { //orign path
+#endif
 	if (pio == PA )
 		callbacksGPA[pos] = NULL;
 	else if (pio == PB )
@@ -125,6 +161,10 @@ void detachInterrupt(uint32_t pin)
 		callbacksGPE[pos] = NULL;
 	else if (pio == PF )
 		callbacksGPF[pos] = NULL;			
+#if defined(__M252__)
+	}
+#endif
+
 }
 
 #ifdef __cplusplus
@@ -133,7 +173,14 @@ extern "C" {
 
 void GPA_IRQHandler(void)
 {
-		uint32_t i;		
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
+	  uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PA->INTSRC & (1<<i))
 	  	{ 
@@ -144,6 +191,14 @@ void GPA_IRQHandler(void)
 }
 void GPB_IRQHandler(void)
 {
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
+
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PB->INTSRC & (1<<i))
@@ -156,6 +211,13 @@ void GPB_IRQHandler(void)
 
 void GPC_IRQHandler(void)
 {
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PC->INTSRC & (1<<i))
@@ -168,6 +230,13 @@ void GPC_IRQHandler(void)
 
 void GPD_IRQHandler(void)
 {
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PD->INTSRC & (1<<i))
@@ -184,6 +253,13 @@ void GPE_IRQHandler(void)
 void GGPE_IRQHandler(void)
 #endif
 {
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PE->INTSRC & (1<<i))
@@ -200,6 +276,13 @@ void GPF_IRQHandler(void)
 void GGPF_IRQHandler(void)
 #endif
 {
+#if defined(__M252__)
+	/* For SoftSerial patch */  
+    /* put handler here for better responding time for higher baudrate. */
+    if( pfn_software_uart_handler) { 
+        pfn_software_uart_handler();
+    } 
+#endif
 		uint32_t i;		
 	  for (i=0; i<GNUM; i++) {
 	  	if(PF->INTSRC & (1<<i))

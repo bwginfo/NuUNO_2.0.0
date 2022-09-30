@@ -12,7 +12,7 @@
 
 void setup()
 {
-  Serial1.begin(115200);
+  Serial.begin(9600);
   
   /* Programming EEPROM */
   int reading;  
@@ -24,8 +24,8 @@ void setup()
   for(int i=0;i<256;i++)
   {
      reading=EEPROM.read(i);  /* Read EEPROM */
-     Serial1.print(reading);   /* print the reading */
-     Serial1.print("\t");        
+     Serial.print(reading);   /* print the reading */
+     Serial.print("\t");        
   }     
 }
 

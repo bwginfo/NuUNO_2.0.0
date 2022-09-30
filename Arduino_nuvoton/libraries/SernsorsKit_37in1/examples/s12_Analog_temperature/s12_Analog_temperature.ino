@@ -1,4 +1,4 @@
-int sensorPin = A0;    // select the input pin for the potentiometer
+int sensorPin = A5;    // select the input pin for the potentiometer
 
 #include <math.h>
 double Thermister(int RawADC)

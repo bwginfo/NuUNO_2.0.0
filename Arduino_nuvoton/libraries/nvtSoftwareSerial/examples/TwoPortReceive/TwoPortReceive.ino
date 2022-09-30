@@ -49,7 +49,6 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-
   // Start each software serial port
   portOne.begin(9600);
   portTwo.begin(9600);
@@ -62,11 +61,15 @@ void loop() {
   Serial.println("Data from port one:");
   // while there is data coming in, read it
   // and send to the hardware serial port:
-  while (portOne.available() > 0) {
-    char inByte = portOne.read();
-    Serial.write(inByte);
+  while(1)
+  {
+    if (portOne.available() > 0) {
+      char inByte = portOne.read();
+      Serial.write(inByte);
+      break;
+    }
+    delay(10);
   }
-
   // blank line to separate data from the two ports:
   Serial.println();
 
@@ -75,11 +78,15 @@ void loop() {
   // while there is data coming in, read it
   // and send to the hardware serial port:
   Serial.println("Data from port two:");
-  while (portTwo.available() > 0) {
-    char inByte = portTwo.read();
-    Serial.write(inByte);
+  while(1)
+  {
+    if (portTwo.available() > 0) {
+      char inByte = portTwo.read();
+      Serial.write(inByte);
+      break;
+    }
+    delay(10);
   }
-
   // blank line to separate data from the two ports:
   Serial.println();
 }

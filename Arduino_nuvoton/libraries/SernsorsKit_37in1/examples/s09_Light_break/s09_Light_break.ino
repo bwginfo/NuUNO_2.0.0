@@ -1,14 +1,14 @@
 int Led=13;
-int obstacleDetectionPin=10;
+int SensorOutputPin=3;
 int val;
 void setup()
 {
     pinMode(Led,OUTPUT);
-    pinMode(obstacleDetectionPin,INPUT);
+    pinMode(SensorOutputPin,INPUT);
 }
 void loop()
 {
-    val=digitalRead(obstacleDetectionPin);
+    val=digitalRead(SensorOutputPin);
     if(val==HIGH)
     {
         digitalWrite(Led,HIGH);

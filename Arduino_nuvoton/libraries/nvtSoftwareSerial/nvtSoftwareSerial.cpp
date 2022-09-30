@@ -93,6 +93,35 @@ static void BSP_TimerDelaySetting(uint32_t u32DelayUs)
     SOFTWARE_UART_TIMER->CTL |=  TIMER_ONESHOT_MODE | (48-1); 
     
     SOFTWARE_UART_TIMER->CMP = u32DelayUs;
+#elif defined(__M252__)
+    SYS_UnlockReg();
+    
+    #if (SOFTWARE_UART_TIMER_SELECT==(0))
+        CLK_EnableModuleClock(TMR0_MODULE);
+        CLK_SetModuleClock(TMR0_MODULE,CLK_CLKSEL1_TMR0SEL_HIRC, 0);
+    #elif (SOFTWARE_UART_TIMER_SELECT==(1))
+        CLK_EnableModuleClock(TMR1_MODULE);
+        CLK_SetModuleClock(TMR1_MODULE,CLK_CLKSEL1_TMR1SEL_HIRC, 0);
+    #elif (SOFTWARE_UART_TIMER_SELECT==(2))
+        CLK_EnableModuleClock(TMR2_MODULE);
+        CLK_SetModuleClock(TMR2_MODULE,CLK_CLKSEL1_TMR2SEL_HIRC, 0);
+    #elif (SOFTWARE_UART_TIMER_SELECT==(3))
+        CLK_EnableModuleClock(TMR3_MODULE);
+        CLK_SetModuleClock(TMR3_MODULE,CLK_CLKSEL1_TMR3SEL_HIRC, 0); 
+    #else
+        #error "SOFTWARE_UART_TIMER def error!"
+    #endif
+           
+    SYS_LockReg();
+    
+
+     /*For 50MHz CPU*/
+    SOFTWARE_UART_TIMER->CTL = 0;
+    
+    /* For 50MHz CPU: 1 us / 1 tick */
+    SOFTWARE_UART_TIMER->CTL |=  TIMER_ONESHOT_MODE | (50-1); 
+    
+    SOFTWARE_UART_TIMER->CMP = u32DelayUs;
 
 #else
 
@@ -131,7 +160,7 @@ static void BSP_TimerDelaySetting(uint32_t u32DelayUs)
 static inline void BPS_delay() //using systick
 {
 
-#if defined(__M032BT__)
+#if defined(__M032BT__) || defined(__M252__)
     SOFTWARE_UART_TIMER->INTSTS = TIMER_INTSTS_TIF_Msk;
     SOFTWARE_UART_TIMER->CTL |= TIMER_CTL_CNTEN_Msk;
     __NOP(); //for 48MHz CPU

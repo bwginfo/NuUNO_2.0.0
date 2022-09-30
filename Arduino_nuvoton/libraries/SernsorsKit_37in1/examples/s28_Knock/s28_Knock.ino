@@ -1,18 +1,16 @@
 int Led=13;
-int Shock=3;
+int Knock=10;
 int val;
 void setup()
 {
     pinMode(Led,OUTPUT);
-    pinMode(Shock,INPUT);
+    pinMode(Knock,INPUT);
 }
 void loop()
 {
-    val=digitalRead(Shock);
+    val=digitalRead(Knock);
     if(val==HIGH)
-        digitalWrite(Led,HIGH);
-    else
         digitalWrite(Led,LOW);
+    else
+        digitalWrite(Led,HIGH);
 }
-
-
