@@ -9,7 +9,7 @@
 
 CHIP=M252
 ARM_GCC_TOOLCHAIN=C:/Users/chche/AppData/Local/Arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin
-PROJECT_BASE_PATH=C:/Users/chche/AppData/Local/Arduino15/packages/nuvoton/hardware/nuvoton/1.8.15/system/$(CHIP)
+PROJECT_BASE_PATH=C:/Users/chche/AppData/Local/Arduino15/packages/nuvoton/hardware/nuvoton/2.0.0/system/$(CHIP)
 CORE=cortex-m23
 
 OUTPUT_BIN=./
