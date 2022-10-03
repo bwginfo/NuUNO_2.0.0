@@ -15,13 +15,13 @@ This repository contains the package descriptor for NuMaker UNO boards
 | -------------- | ---------------- | ----------------------------------------------- |
 | **NUC131**     | ✔️                | ❌                                               |
 | **M032BT**     | ✔️                | ✔️                                               |
-
+| **M252**       | ✔️                | ❌                                               |
 
 # Board Package Installation Steps
 1. Download and Install Arduino IDE from https://www.arduino.cc/en/Main/Software
 2. Double-click arduino.exe, and then go to **File->Preferences**
 3. Paste following URL to 'Additional Boards Manager URLs' input field: 
-`https://raw.githubusercontent.com/OpenNuvoton/NuMaker_UNO/master/package_nuvoton_index.json`
+`https://raw.githubusercontent.com/chchen59/NuUNO/master/package_nuvoton_index.json`
 4. Under **Tools->Board->Boards Manger**, search `NuMaker UNO`, click **Install**
 5. You can now select NuMaker UNO and install it in Arduino IDE.
 
@@ -35,10 +35,7 @@ The driver "Nu-Link_USB_Driver 1.x.exe" can be found at: http://www.nuvoton.com/
 4. Connect the NuMaker UNO with PC using a USB cable. If the driver is successfully installed, the Windows shall find a new device and then automatically find the correct driver. A virtual COM port named "Nuvoton Virtual Com Port" can be found in "Device Manager".
 
 # Compatible Versions of Arduino IDE
-* 1.8.15
-* 1.8.10
-* 1.8.8
-* 1.8.5
+* 2.0.0
 
 # Disclaimer
 The Software is furnished "AS IS", without warranty as to performance or results, and
