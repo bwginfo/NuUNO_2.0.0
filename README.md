@@ -21,7 +21,7 @@ This repository contains the package descriptor for NuMaker UNO boards
 1. Download and Install Arduino IDE from https://www.arduino.cc/en/Main/Software
 2. Double-click arduino.exe, and then go to **File->Preferences**
 3. Paste following URL to 'Additional Boards Manager URLs' input field: 
-`https://raw.githubusercontent.com/chchen59/NuUNO/master/package_nuvoton_index.json`
+`https://raw.githubusercontent.com/bwginfo/NuUNO_2.0.0/master/package_nuvoton_index.json`
 4. Under **Tools->Board->Boards Manger**, search `NuMaker UNO`, click **Install**
 5. You can now select NuMaker UNO and install it in Arduino IDE.
 
